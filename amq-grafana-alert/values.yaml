@@ -1,0 +1,18 @@
+monitoredNamespace: default
+brokerInstance: artemis-broker
+service: "service1"
+dashboardName: "Service1 Queues Alert"
+uid: service1queuealerts
+queues:
+  - name: queue1
+    minConsumer: 1
+    maxDepth: 88
+  - name: queue2
+    minConsumer: 1
+    maxDepth: 99
+  - name: queue3
+    minConsumer: 1
+    maxDepth: 99
+
+nameOverride: ""
+fullnameOverride: ""
