@@ -60,3 +60,10 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Create dashboard name with namespace and service.
+*/}}
+{{- define "amq-grafana-alert.dashboard-name" -}}
+{{- printf "%s-%s-qa" .Values.monitoredNamespace .Values.service | replace "*" "" | replace "." "" | replace "--" "-" | trunc 63 | trimSuffix "-" }}
+{{- end }}

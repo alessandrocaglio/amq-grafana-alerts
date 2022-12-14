@@ -1,8 +1,7 @@
 apiVersion: integreatly.org/v1alpha1
 kind: GrafanaDashboard
 metadata:
-#  name: {{ .Values.service }}-queue-alerts
-  name: lab-mb
+  name: '{{- template "amq-grafana-alert.dashboard-name" . }}'
   namespace: titan-monitoring
   labels:
     app: grafana
@@ -55,7 +54,7 @@ spec:
                   "params": [
                     "{{ $queue.name }}",
                     "5m",
-                    "now"
+                    "now" 
                   ]
                 },
                 "reducer": {
@@ -122,7 +121,7 @@ spec:
           "targets": [
             {
               "exemplar": true,
-              "expr": "artemis_message_count{ ActiveMQArtemis=\"{{ $.Values.brokerInstance }}\", namespace=~\"{{ $.Values.monitoredNamespace }}\",queue=\"{{ $queue.name }}\"}",
+              "expr": "sum by (namespace,queue) (artemis_message_count{ ActiveMQArtemis=\"{{ $.Values.brokerInstance }}\", namespace=~\"{{ $.Values.monitoredNamespace }}\",queue=\"{{ $queue.name }}\"})",
               "hide": false,
               "interval": "",
               "legendFormat": "{{ "{{namespace}}-{{queue}}" }}",
@@ -264,7 +263,7 @@ spec:
           "targets": [
             {
               "exemplar": true,
-              "expr": "artemis_consumer_count{ ActiveMQArtemis=\"{{ $.Values.brokerInstance }}\", namespace=~\"{{ $.Values.monitoredNamespace }}\", queue=\"{{ $queue.name }}\"}",
+              "expr": "sum by (namespace,queue) (artemis_consumer_count{ ActiveMQArtemis=\"{{ $.Values.brokerInstance }}\", namespace=~\"{{ $.Values.monitoredNamespace }}\", queue=\"{{ $queue.name }}\"})",
               "hide": false,
               "interval": "",
               "legendFormat": "{{ "{{namespace}}-{{queue}}" }}",
@@ -339,6 +338,6 @@ spec:
       },
       "timepicker": {},
       "timezone": "",
-      "title": "ALE-lab-{{ $.Values.monitoredNamespace }}-{{ $.Values.service }}",
+      "title": "{{ $.Values.dashboardName }}",
       "uid": "{{ $.Values.uid }}"
     }
